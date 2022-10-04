@@ -15,7 +15,7 @@ def create_design_matrix(x, y, polynomial_degree=1):
                 col_name = 'y^' + str(j)
             elif j == 0:
                 col_name = 'x^' + str(i)
-            else :
+            else:
                 col_name = 'x^' + str(i) + '*y^' + str(j)  
             X[col_name] = x**i * y**j
     return X
