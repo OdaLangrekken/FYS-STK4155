@@ -66,3 +66,58 @@ def cross_validation(X, z, num_folds=5):
     mse_train = np.mean(mse_train)
     return mse_test, mse_train
             
+
+def make_bootstrap_sample(X, z, sample_size):
+    """
+    Function that generates one bootstrap sample.
+    
+    Input
+    -----
+    X (dataframe or matrix): design matrix containing all input data
+    z (array): array of outputs
+    sample_size (int): size of bootstrap sample
+    
+    Returns
+    -------
+    X_sample (dataframe): bootstrap sample of input data
+    z_sample (array): output data corresponding to input data in bootstrap sample
+    X_test (dataframe): input data not sampled, used as test data
+    z_test (dataframe): output data corresponding to input data not sampled
+    """
+    # Randomly draw n rows from design matrix X with replacement
+    X_sample = X.sample(n=sample_size, replace=True)
+    rows_chosen = X_sample.index
+    # Choose same rows from z to get output training data
+    z_sample = z[rows_chosen]
+    
+    # Use rows not sampled as test set
+    X_test = X[~X.index.isin(rows_chosen)]
+    z_test = np.delete(z, rows_chosen)
+    
+    return X_sample, z_sample, X_test, z_test
+
+def bootstrap(X, z, n, sample_size):
+    # Define empty lists to store mean squared errors
+    mse_test = []
+    mse_sample = []
+    
+    # Do sampling n times
+    for i in range(n):
+        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z, sample_size)
+        
+        # Train the model
+        lm = LinearModel()
+        lm.fit(X_sample, z_sample)
+        
+        # Make predictions
+        z_sample_predict = lm.predict(X_sample)
+        z_test_predict = lm.predict(X_test)
+        
+        # Compute mean squared error for fold
+        mse_test.append(MSE(z_test, z_test_predict))
+        mse_sample.append(MSE(z_sample, z_sample_predict))
+    
+    # Compute and return average mean squared error
+    mse_test = np.mean(mse_test)
+    mse_sample = np.mean(mse_sample)
+    return mse_test, mse_sample
