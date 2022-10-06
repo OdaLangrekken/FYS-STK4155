@@ -1,11 +1,9 @@
 import os
 import sys
 
-current_path = os.getcwd()
-sys.path.append(current_path + '\Project1\project1')
 
 import numpy as np
-from regression_methods import OLS, ridge
+from project1_code.regression_methods import OLS
 
 class LinearModel():
 

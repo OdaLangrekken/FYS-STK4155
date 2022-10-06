@@ -1,13 +1,8 @@
-import os
-import sys
-
-current_path = os.getcwd()
-sys.path.append(current_path + '\Project1\project1')
-
 import pandas as pd
 import numpy as np
-from linear_model import LinearModel
-from model_selection import MSE
+
+from project1_code.linear_model import LinearModel
+from project1_code.model_selection import MSE
 
 def cross_validation(X, z, num_folds=5):
     """

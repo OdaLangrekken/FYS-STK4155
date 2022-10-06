@@ -1,12 +1,6 @@
-import os
-import sys
-
-current_path = os.getcwd()
-sys.path.append(current_path + '\Project1\project1')
-
-from linear_model import LinearModel
-from regression_methods import OLS, ridge
-from model_selection import MSE
+from project1_code.linear_model import LinearModel
+from project1_code.regression_methods import OLS, ridge
+from project1_code.model_selection import MSE
 import unittest
 import numpy as np
 import pandas as pd

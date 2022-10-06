@@ -1,12 +1,6 @@
-import os
-import sys
-
-current_path = os.getcwd()
-sys.path.append(current_path + '\Project1\project1')
-
-from linear_model import LinearModel
-from make_and_prepare_data import FrankeFunction, create_design_matrix
-from model_selection import *
+from project1_code.linear_model import LinearModel
+from project1_code.make_and_prepare_data import FrankeFunction, create_design_matrix
+from project1_code.model_selection import *
 import unittest
 import numpy as np
 import pandas as pd

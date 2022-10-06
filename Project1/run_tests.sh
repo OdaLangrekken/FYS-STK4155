@@ -1,4 +1,5 @@
-cd project1
-python -m unittest > ../testing_outputs/unittest_output.txt
-cd ..
-python testing_scripts/*
+# Run all unit tests
+
+cd project1_code/project1_module
+python -m unittest > ../../output/benchmarks/unittests_output.txt
+cd ../..
