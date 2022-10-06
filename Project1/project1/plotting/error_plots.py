@@ -24,7 +24,7 @@ def plot_mse_per_poldegree(mse_train, mse_test, pol_degree, save_plot=False, sav
     plt.ylabel('Mean squared error');
     #plt.title('Mean squared error as a function of polynomial degree');
     ax.set_xticks(range(1, pol_degree+1))
-    plt.yscale('log')
+    #plt.yscale('log')
 
     
     if save_plot:
