@@ -1,2 +1,0 @@
-from .create_design_matrix import create_design_matrix, create_design_matrix_1d
-from .franke import FrankeFunction

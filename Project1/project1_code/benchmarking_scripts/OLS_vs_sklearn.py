@@ -1,18 +1,12 @@
-import os
-import sys
-
-current_path = os.getcwd()
-sys.path.append(current_path + '\Project1\project1')
-
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
 # Import self-made modules
-from linear_model import LinearModel
-from make_and_prepare_data import FrankeFunction, create_design_matrix
-from model_selection import R2, MSE
+from project1_code.linear_model import LinearModel
+from project1_code.make_and_prepare_data import FrankeFunction, create_design_matrix
+from project1_code.model_selection import R2, MSE
 
 
 # Choose hyperparameters for model
@@ -21,6 +15,7 @@ data_size = 200
 test_size = 0.2
 
 # Make data
+np.random.seed(5)
 x = np.random.uniform(0, 1, data_size)
 y = np.random.uniform(0, 1, data_size)
 
@@ -56,8 +51,10 @@ for i in range(1, pol_degree+1):
     r2s_train.append(R2(z_train, z_pred_train)) 
 
 # Write results to file
+import os
+script_path = os.path.dirname(os.path.realpath(__file__))
 
-with open(current_path + '\\Project1\\testing_outputs\\osl_sklearn_compare.txt', 'w') as f:
+with open(script_path + '\\..\\..\\output\\benchmarks\\osl_sklearn_compare.txt', 'w') as f:
     f.write('Coefficient, Coefficients (OLS_homemade), Coefficients (sklearn) \n')
     homemade_coefs = lr.coeffs
     
