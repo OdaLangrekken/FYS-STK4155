@@ -70,7 +70,7 @@ def make_bootstrap_sample(X, z, sample_size):
     -----
     X (dataframe or matrix): design matrix containing all input data
     z (array): array of outputs
-    sample_size (int): size of bootstrap sample
+    sample_size (float): percentage of input to use for bootstrap sample
     
     Returns
     -------
@@ -80,7 +80,7 @@ def make_bootstrap_sample(X, z, sample_size):
     z_test (dataframe): output data corresponding to input data not sampled
     """
     # Randomly draw n rows from design matrix X with replacement
-    X_sample = X.sample(n=sample_size, replace=True)
+    X_sample = X.sample(n=sample_size*len(X), replace=True)
     rows_chosen = X_sample.index
     # Choose same rows from z to get output training data
     z_sample = z[rows_chosen]
@@ -91,10 +91,30 @@ def make_bootstrap_sample(X, z, sample_size):
     
     return X_sample, z_sample, X_test, z_test
 
-def bootstrap(X, z, n, sample_size):
+def bootstrap(X, z, num_iterations=5, sample_size=0.8):
+    """
+    Function that uses bootstrap resampling to compute test and train mean squared error.
+    For each iteration a n datapoints (determined by sample_size) are sampled from X and z.
+    The model is trained on the sample, and the test error is computed on data not in sample.
+    The test and train errors are computed as the average error over all iterations.
+
+
+    Input
+    -----
+    X (dataframe or matrix): design matrix containing all input data
+    z (array): array of outputs
+    num_iterations (int): number of times to do bootstrap 
+    sample_size (float): percentage of input to use for bootstrap sample
+    
+    Returns
+    -------
+    mse_test (float): average mean squared error on test set
+    mse_train (float): average mean squared error on training set
+    """
+
     # Define empty lists to store mean squared errors
     mse_test = []
-    mse_sample = []
+    mse_train = []
     
     # Do sampling n times
     for i in range(n):
@@ -110,9 +130,9 @@ def bootstrap(X, z, n, sample_size):
         
         # Compute mean squared error for fold
         mse_test.append(MSE(z_test, z_test_predict))
-        mse_sample.append(MSE(z_sample, z_sample_predict))
+        mse_train.append(MSE(z_sample, z_sample_predict))
     
     # Compute and return average mean squared error
     mse_test = np.mean(mse_test)
-    mse_sample = np.mean(mse_sample)
-    return mse_test, mse_sample
+    mse_train = np.mean(mse_train)
+    return mse_test, mse_train
