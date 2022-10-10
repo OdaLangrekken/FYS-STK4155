@@ -30,7 +30,7 @@ z = FrankeFunction(x, y) + np.random.normal(scale = error_std, size = data_size)
 X = create_design_matrix(x, y, pol_degree)
     
 # Split data in train and test
-X_train, X_test, z_train, z_test = train_test_split(X, z, test_size = test_size)
+X_train, X_test, z_train, z_test = train_test_split(X, z, test_size = test_size, random_state=1)
     
 # Train model
 lr = LinearModel()

@@ -11,7 +11,7 @@ from project1_code.model_selection import R2, MSE
 
 # Choose hyperparameters for model
 pol_degree = 5
-data_size = 200
+data_size = 300
 test_size = 0.2
 
 # Make data
@@ -25,7 +25,7 @@ z = FrankeFunction(x, y)
 X = create_design_matrix(x, y, polynomial_degree=pol_degree)
     
 # Split data in train and test
-X_train, X_test, z_train, z_test = train_test_split(X, z, test_size = test_size)
+X_train, X_test, z_train, z_test = train_test_split(X, z, test_size = test_size, random_state=1)
     
 # Train model
 lr = LinearModel()
@@ -46,7 +46,7 @@ coefficient_names = X_train.columns
 import os
 script_path = os.path.dirname(os.path.realpath(__file__))
 
-with open(script_path + '\\..\\..\\output\\benchmarks\\osl_sklearn_compare.txt', 'w') as f:
+with open(script_path + '\\..\\..\\output\\benchmarks\\osl_sklearn_compare_coeffs_pol_degree=' + str(pol_degree) + '_datapoints=' + str(data_size) + '.txt', 'w') as f:
     f.write('Coefficient, Coefficients (OLS_homemade), Coefficients (sklearn) \n')
 
     f.write('Bias, ' + str(round(homemade_coefs[0], 4)) + ', ' + str(round(sk_intercept, 4)) + '\n')

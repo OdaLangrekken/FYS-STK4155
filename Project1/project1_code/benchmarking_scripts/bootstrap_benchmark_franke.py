@@ -13,7 +13,7 @@ from project1_code.plotting import plot_mse_per_poldegree, plot_R2_per_poldegree
 
 # Parameters for benchmark model
 pol_degree = 5
-data_size = 300
+data_size = 600
 test_size = 0.2
 error_std = 0.1
 save_fig = False
@@ -29,7 +29,7 @@ z = FrankeFunction(x, y) + np.random.normal(scale = error_std, size = data_size)
 # Make design matrix
 X = create_design_matrix(x, y, pol_degree)
 
-mse_test, mse_train = bootstrap(X, z, 5, sample_size=int(0.75*len(z)))
+mse_test, mse_train = bootstrap(X, z, 5)
 
 print(mse_train)
 print(mse_test)

@@ -3,7 +3,7 @@ import sys
 
 
 import numpy as np
-from project1_code.regression_methods import OLS
+from project1_code.regression_methods import OLS, ridge
 
 class LinearModel():
 
@@ -20,11 +20,12 @@ class LinearModel():
         self.lamb = lamb
     
     def fit(self, X, y):
-        # Add bias term
-        X = self.add_bias(X)
         if self.regr_type == 'OLS':
+            # Add bias term
+            X = self.add_bias(X)
             self.coeffs = OLS(X, y)
         elif self.regr_type == 'ridge':
+            X = self.add_bias(X)
             self.coeffs = ridge(X, y, self.lamb)
         
     def predict(self, new_data):
@@ -43,35 +44,3 @@ class LinearModel():
         # Add bias
         X = np.hstack([X_bias, X])
         return X
-    
-    def OLS(self, X, y):
-        """
-        Function that finds the coefficients that minimize the residual sum of squares.
-    
-        Parameters:
-            x (array of shape (n, m)): array containing the m different features
-            y (array of shape (n, 1)): array containing the output
-       
-        Output:
-            coeffs (array of shape (m+1,1)): coefficients that minimize the residual sum of squares
-        """
-        # Solve for the coefficents  
-        coeffs = np.linalg.inv(X.T @ X) @ X.T @ y
-        return coeffs
-
-    def ridge(self, X, y, lamb):
-        """
-        Function that finds the coefficients that minimize the residual sum of squares using ridge regression.
-    
-        Parameters:
-            x (array of shape (n, m)): array containing the m different features
-            y (array of shape (n, 1)): array containing the output
-       
-        Output:
-            coeffs (array of shape (m+1,1)): coefficients that minimize the residual sum of squares using ridge regression
-        """
-        # Find number of features
-        p = X.shape[1]
-        # Solve for the coefficents  
-        coeffs = np.linalg.inv(X.T @ X + lamb*np.identity(p)) @ X.T @ y
-        return coeffs

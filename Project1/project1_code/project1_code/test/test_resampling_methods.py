@@ -20,7 +20,7 @@ class TestResamplingMethods(unittest.TestCase):
         z = FrankeFunction(x, y)
         X = create_design_matrix(x, y, 5)
 
-        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z, sample_size=15)
+        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z)
         
         sample_rows = X_sample.index.unique().sort_values().tolist()
         test_rows = X_test.index.sort_values().tolist()
@@ -42,7 +42,7 @@ class TestResamplingMethods(unittest.TestCase):
         z = FrankeFunction(x, y)
         X = create_design_matrix(x, y, 5)
 
-        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z, sample_size=15)
+        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z)
         
         print(f'Size of X_test: {len(X_test)}')
         print(f'Size of z_test: {len(z_test)}')

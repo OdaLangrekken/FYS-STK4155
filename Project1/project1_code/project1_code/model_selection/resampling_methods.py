@@ -62,7 +62,7 @@ def cross_validation(X, z, num_folds=5):
     return mse_test, mse_train
             
 
-def make_bootstrap_sample(X, z, sample_size):
+def make_bootstrap_sample(X, z, sample_size=1):
     """
     Function that generates one bootstrap sample.
     
@@ -91,7 +91,7 @@ def make_bootstrap_sample(X, z, sample_size):
     
     return X_sample, z_sample, X_test, z_test
 
-def bootstrap(X, z, num_iterations=5, sample_size=0.8):
+def bootstrap(X, z, num_iterations=5, sample_size=1):
     """
     Function that uses bootstrap resampling to compute test and train mean squared error.
     For each iteration a n datapoints (determined by sample_size) are sampled from X and z.
