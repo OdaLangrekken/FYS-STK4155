@@ -36,13 +36,18 @@ class TestRegressionMethods(unittest.TestCase):
         y = 2 + 5*x + 3*x**2
 
         X = create_design_matrix_1d(x, 2)
-        # Add bias
+
+        # Scale data for ridge regression
+        X_scaled = X - np.mean(X, axis=0)
+
+        # Add bias 
         X.insert(0, 'bias', np.ones(len(X)))
+        X_scaled.insert(0, 'bias', np.ones(len(X_scaled)))
 
         # FInd OLS coefficients
         coeffs_OLS = OLS(X, y).tolist()
-
         # Find ridge coefficients
+
         coeffs_ridge = ridge(X, y, lamb=0).tolist()
 
         print(f'Coefficients from OLS: {coeffs_OLS}')

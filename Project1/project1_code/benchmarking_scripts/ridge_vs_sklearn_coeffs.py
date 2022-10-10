@@ -26,6 +26,9 @@ X = create_design_matrix(x, y, polynomial_degree=pol_degree)
     
 # Split data in train and test
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size = test_size, random_state=1)
+
+# Center the training data by subtracting mean
+X_train = X_train - np.mean(X_train, axis = 0)
     
 # Train model
 lr = LinearModel(regr_type='ridge', lamb=0.7)

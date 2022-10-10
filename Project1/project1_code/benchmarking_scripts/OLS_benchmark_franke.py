@@ -8,9 +8,6 @@ from project1_code.linear_model import LinearModel
 from project1_code.make_and_prepare_data import FrankeFunction, create_design_matrix
 from project1_code.model_selection import R2, MSE
 
-# Import plotting functions
-from project1_code.plotting import plot_mse_per_poldegree, plot_R2_per_poldegree
-
 # Parameters for benchmark model
 pol_degree = 5
 data_size = 300

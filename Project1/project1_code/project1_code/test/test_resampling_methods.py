@@ -50,5 +50,5 @@ class TestResamplingMethods(unittest.TestCase):
         self.assertEqual(len(X_test), len(z_test), 'X_test and z_test are not the same size!')
 
 if __name__ == '__main__':
-
+    
     unittest.main()
