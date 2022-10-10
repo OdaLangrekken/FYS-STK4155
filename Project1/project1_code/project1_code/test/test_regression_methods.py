@@ -1,5 +1,6 @@
 from project1_code.regression_methods import OLS, ridge
 from project1_code.model_selection import MSE
+from project1_code.make_and_prepare_data import create_design_matrix_1d
 import unittest
 import numpy as np
 import pandas as pd
@@ -24,6 +25,29 @@ class TestRegressionMethods(unittest.TestCase):
 
         # Test that MSE is equal to 0, within a 1E-20 precision error
         self.assertAlmostEqual(mse, 0, delta = 1E-20)
+
+    def test_ridge_lambda_0(self):
+        print('-------------------------------------------------------------------')
+        print('-------------------------------------------------------------------')
+        print('Test that ridge regression returns same coefficients as OLS when lambda=0')
+        print('-------------------------------------------------------------------')
+
+        x = np.linspace(0, 10, 20)
+        y = 2 + 5*x + 3*x**2
+
+        X = create_design_matrix_1d(x, 2)
+        # Add bias
+        X.insert(0, 'bias', np.ones(len(X)))
+
+        # FInd OLS coefficients
+        coeffs_OLS = OLS(X, y).tolist()
+
+        # Find ridge coefficients
+        coeffs_ridge = ridge(X, y, lamb=0).tolist()
+
+        print(f'Coefficients from OLS: {coeffs_OLS}')
+        print(f'Coefficients from Ridge: {coeffs_ridge}')
+        np.testing.assert_array_equal(coeffs_OLS, coeffs_ridge, 'Ridge regression not returning same result as OLS when lambda=0!')
 
 if __name__ == '__main__':
     unittest.main()
