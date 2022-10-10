@@ -10,7 +10,7 @@ from project1_code.model_selection import R2, MSE
 
 # Parameters for benchmark model
 pol_degree = 5
-data_size = 300
+data_size = 600
 test_size = 0.2
 error_std = 0.1
 save_fig = False
@@ -45,5 +45,3 @@ r2_test = R2(z_test, z_pred_test)
 
 print(mse_train)
 print(mse_test)
-print(r2_train)
-print(r2_test)

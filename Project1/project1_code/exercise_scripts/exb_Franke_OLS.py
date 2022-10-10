@@ -12,8 +12,8 @@ from project1_code.model_selection import R2, MSE
 from project1_code.plotting import plot_mse_per_poldegree, plot_R2_per_poldegree
 
 # Choose parameters for model, should read these from terminal or scripts
-pol_degree = 5
-data_size = 300
+pol_degree = 10
+data_size = 600
 test_size = 0.2
 error_std = 0.1
 save_fig = False

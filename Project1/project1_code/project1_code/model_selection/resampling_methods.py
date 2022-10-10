@@ -4,7 +4,7 @@ import numpy as np
 from project1_code.linear_model import LinearModel
 from project1_code.model_selection import MSE
 
-def cross_validation(X, z, num_folds=5):
+def cross_validation(model, X, z, num_folds=5):
     """
     Function that uses cross-validation to compute test MSE
     by splitting the data in num_folds folds and computes test error on 
@@ -13,6 +13,7 @@ def cross_validation(X, z, num_folds=5):
     
     Input
     -----
+        model (LinearModel class instance): model to be trained
         X (dataframe): the design matrix containing all input data
         z (array): an array of outputs
         num_folds (int): number of folds
@@ -28,6 +29,10 @@ def cross_validation(X, z, num_folds=5):
     
     # Find size of each fold
     fold_size = int(len(X) / num_folds)
+
+    if ~isinstance(X, pd.DataFrame):
+        X = pd.DataFrame(X)
+
     
     # Loop thorough all folds
     for i in range(num_folds):
@@ -45,12 +50,11 @@ def cross_validation(X, z, num_folds=5):
         z_train = np.concatenate([z[:i*fold_size], z[(i+1)*fold_size:]])
 
         # Train the model
-        lm = LinearModel()
-        lm.fit(X_train, z_train)
+        model.fit(X_train, z_train)
         
         # Make predictions
-        z_train_predict = lm.predict(X_train)
-        z_test_predict = lm.predict(X_test)
+        z_train_predict = model.predict(X_train)
+        z_test_predict = model.predict(X_test)
         
         # Compute mean squared error for fold
         mse_test.append(MSE(z_test, z_test_predict))
