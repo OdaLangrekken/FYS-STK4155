@@ -29,13 +29,6 @@ def ridge(X, y, lamb):
     """
     # Find number of features
     p = X.shape[1]
-    # Center input
-    #X = X - np.mean(X, axis=0)
     # Solve for the coefficents  
     coeffs = np.linalg.inv(X.T @ X + lamb*np.identity(p)) @ X.T @ y
-    # Find bias
-    ##y_pred = X @ coeffs
-    #beta0 = np.sum(y_pred)/len(y_pred)
-    #print(beta0)
-    #coeffs = np.append([beta0], coeffs)
     return coeffs
