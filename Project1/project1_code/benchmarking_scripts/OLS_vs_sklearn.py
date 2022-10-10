@@ -49,6 +49,6 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 with open(script_path + '\\..\\..\\output\\benchmarks\\osl_sklearn_compare.txt', 'w') as f:
     f.write('Coefficient, Coefficients (OLS_homemade), Coefficients (sklearn) \n')
 
-    f.write('Bias, ' + str(homemade_coefs[0]) + ', ' + str(sk_intercept) + '\n')
+    f.write('Bias, ' + str(round(homemade_coefs[0], 4)) + ', ' + str(round(sk_intercept, 4)) + '\n')
     for i in range(1, len(homemade_coefs)):
-         f.write(str(coefficient_names[i-1]) + ', ' + str(homemade_coefs[i]) + ', ' + str(sk_coeffs[i-1]) + '\n')
+         f.write(str(coefficient_names[i-1]) + ', ' + str(round(homemade_coefs[i], 4)) + ', ' + str(round(sk_coeffs[i-1], 4)) + '\n')

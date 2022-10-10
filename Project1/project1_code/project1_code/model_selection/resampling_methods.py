@@ -117,7 +117,7 @@ def bootstrap(X, z, num_iterations=5, sample_size=0.8):
     mse_train = []
     
     # Do sampling n times
-    for i in range(n):
+    for i in range(num_iterations):
         X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z, sample_size)
         
         # Train the model
