@@ -1,0 +1,3 @@
+MSE from OLS 
+MSE train: 0.01168546 
+MSE test: 0.0131616 
