@@ -7,12 +7,10 @@ import pandas as pd
 
 class TestResamplingMethods(unittest.TestCase):
 
-    def test_bootstrap_trainvstest_indices(self):
-
-        # Test that test set only contains the data not sampled
+    def test_bootstrap_same_sample_size(self):
         print('-------------------------------------------------------------------')
         print('-------------------------------------------------------------------')
-        print('Bootstrap: Test that test set only contains the data not sampled')
+        print('Bootstrap: Test that X_samle and z_sample have same size')
         print('-------------------------------------------------------------------')
         # Make data
         x = np.random.uniform(0, 1, 20)
@@ -20,34 +18,12 @@ class TestResamplingMethods(unittest.TestCase):
         z = FrankeFunction(x, y)
         X = create_design_matrix(x, y, 5)
 
-        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z)
+        X_sample, z_sample = make_bootstrap_sample(X, z)
         
-        sample_rows = X_sample.index.unique().sort_values().tolist()
-        test_rows = X_test.index.sort_values().tolist()
+        print(f'Size of X_sample: {len(X_sample)}')
+        print(f'Size of z_sample: {len(z_sample)}')
 
-        print(f'Rows selected for sample: {sample_rows}')
-        print(f'Rows selected for test: {test_rows}')
-
-        for i in range(len(test_rows)):
-            self.assertFalse(test_rows[i] in sample_rows, 'Some rows are in both sample and test set!')
-
-    def test_bootstrap_same_test_size(self):
-        print('-------------------------------------------------------------------')
-        print('-------------------------------------------------------------------')
-        print('Bootstrap: Test that X_test and z_test have same size')
-        print('-------------------------------------------------------------------')
-        # Make data
-        x = np.random.uniform(0, 1, 20)
-        y = np.random.uniform(0, 1, 20)
-        z = FrankeFunction(x, y)
-        X = create_design_matrix(x, y, 5)
-
-        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z)
-        
-        print(f'Size of X_test: {len(X_test)}')
-        print(f'Size of z_test: {len(z_test)}')
-
-        self.assertEqual(len(X_test), len(z_test), 'X_test and z_test are not the same size!')
+        self.assertEqual(len(X_sample), len(z_sample), 'X_test and z_test are not the same size!')
 
 if __name__ == '__main__':
     

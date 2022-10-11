@@ -83,6 +83,7 @@ def make_bootstrap_sample(X, z, sample_size=1):
     X_test (dataframe): input data not sampled, used as test data
     z_test (dataframe): output data corresponding to input data not sampled
     """
+    X = X.reset_index(drop=True)
     # Randomly draw n rows from design matrix X with replacement
     X_sample = X.sample(n=sample_size*len(X), replace=True)
     rows_chosen = X_sample.index
@@ -90,12 +91,12 @@ def make_bootstrap_sample(X, z, sample_size=1):
     z_sample = z[rows_chosen]
     
     # Use rows not sampled as test set
-    X_test = X[~X.index.isin(rows_chosen)]
-    z_test = np.delete(z, rows_chosen)
+    #X_test = X[~X.index.isin(rows_chosen)]
+    #z_test = np.delete(z, rows_chosen)
     
-    return X_sample, z_sample, X_test, z_test
+    return X_sample, z_sample
 
-def bootstrap(X, z, num_iterations=5, sample_size=1):
+def bootstrap(model, X_train, z_train, X_test, z_test, num_iterations=5, sample_size=1):
     """
     Function that uses bootstrap resampling to compute test and train mean squared error.
     For each iteration a n datapoints (determined by sample_size) are sampled from X and z.
@@ -122,15 +123,14 @@ def bootstrap(X, z, num_iterations=5, sample_size=1):
     
     # Do sampling n times
     for i in range(num_iterations):
-        X_sample, z_sample, X_test, z_test = make_bootstrap_sample(X, z, sample_size)
+        X_sample, z_sample = make_bootstrap_sample(X_train, z_train, sample_size=1)
         
         # Train the model
-        lm = LinearModel()
-        lm.fit(X_sample, z_sample)
+        model.fit(X_sample, z_sample)
         
         # Make predictions
-        z_sample_predict = lm.predict(X_sample)
-        z_test_predict = lm.predict(X_test)
+        z_sample_predict = model.predict(X_sample)
+        z_test_predict = model.predict(X_test)
         
         # Compute mean squared error for fold
         mse_test.append(MSE(z_test, z_test_predict))
