@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
+from sklearn.preprocessing import StandardScaler
+
 
 from project1_code.linear_model import LinearModel
 from project1_code.model_selection import MSE
 
-def cross_validation(model, X, z, num_folds=5):
+def cross_validation(model, X, z, num_folds=5, scale=False):
     """
     Function that uses cross-validation to compute test MSE
     by splitting the data in num_folds folds and computes test error on 
@@ -48,6 +50,13 @@ def cross_validation(model, X, z, num_folds=5):
         # Select the rest of the data for the training set
         X_train = pd.concat([X.iloc[:i*fold_size], X.iloc[(i+1)*fold_size:]])
         z_train = np.concatenate([z[:i*fold_size], z[(i+1)*fold_size:]])
+
+        if scale:
+            scaler = StandardScaler()
+            scaler.fit(X_train)
+
+            X_train = scaler.transform(X_train)
+            X_test = scaler.transform(X_test)
 
         # Train the model
         model.fit(X_train, z_train)

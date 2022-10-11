@@ -13,7 +13,9 @@ pol_degree = 5
 data_size = 600
 test_size = 0.2
 error_std = 0.1
-save_fig = False
+num_folds = 5
+num_iterations = 100
+
 
 # Make data
 np.random.seed(5)
@@ -29,6 +31,8 @@ X = create_design_matrix(x, y, pol_degree)
 # Split data in train and test
 X_train, X_test, z_train, z_test = train_test_split(X, z, test_size = test_size, random_state=1)
     
+
+## OLS    
 # Train model
 lr = LinearModel()
 lr.fit(X_train, z_train)
@@ -40,8 +44,16 @@ z_pred_train = lr.predict(X_train)
 mse_train = MSE(z_train, z_pred_train)
 mse_test = MSE(z_test, z_pred_test)
 
-r2_train = R2(z_train, z_pred_train)
-r2_test = R2(z_test, z_pred_test)
+# Write results to file
+import os
+script_path = os.path.dirname(os.path.realpath(__file__))
 
-print(mse_train)
-print(mse_test)
+with open(script_path + '\\..\\..\\output\\benchmarks\\benchmark_pol_degree=' + str(pol_degree) + '_datapoints=' + str(data_size) + '.txt', 'w') as f:
+    f.write('MSE from OLS \n')
+    f.write(f'MSE train: {round(mse_train, 8)} \n')
+    f.write(f'MSE test: {round(mse_test, 8)} \n')
+    f.write(f'With boostrap, iterations = {num_iterations} \n')
+
+    f.write(f'With cross-validation, folds = {num_folds} \n')
+
+
