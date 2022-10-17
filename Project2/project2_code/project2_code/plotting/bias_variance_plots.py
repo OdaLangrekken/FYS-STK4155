@@ -14,4 +14,4 @@ def plot_bias_variance(biases, variances, mses, pol_degree, save_plot=False, sav
     ax.set_xticks(range(1, pol_degree+1))
 
     if save_plot:
-        plt.savefig(current_path + '\\Project1\\output\\figures\\' + save_title + '.jpg')
+        plt.savefig(current_path + '\\project2\\output\\figures\\' + save_title + '.jpg')

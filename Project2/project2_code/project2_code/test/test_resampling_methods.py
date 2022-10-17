@@ -1,6 +1,6 @@
-from project1_code.linear_model import LinearModel
-from project1_code.make_and_prepare_data import FrankeFunction, create_design_matrix
-from project1_code.model_selection import *
+from project2_code.linear_model import LinearModel
+from project2_code.make_and_prepare_data import FrankeFunction, create_design_matrix
+from project2_code.model_selection import *
 import unittest
 import numpy as np
 import pandas as pd

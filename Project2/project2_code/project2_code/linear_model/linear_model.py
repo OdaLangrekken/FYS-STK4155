@@ -3,7 +3,7 @@ import sys
 
 
 import numpy as np
-from project1_code.regression_methods import OLS, ridge
+from project2_code.regression_methods import OLS, ridge
 
 class LinearModel():
 
