@@ -4,6 +4,7 @@ import sys
 
 import numpy as np
 from project2_code.regression_methods import OLS, ridge
+from project2_code.optimization_methods import gradient_descent
 
 class LinearModel():
 
@@ -15,18 +16,29 @@ class LinearModel():
     
     """
 
-    def __init__(self, regr_type = 'OLS', lamb = 0):
+    def __init__(self, regr_type = 'OLS', fit_type='analytic', lamb = 0):
         self.regr_type = regr_type
+        self.fit_type = fit_type
         self.lamb = lamb
     
     def fit(self, X, y):
         if self.regr_type == 'OLS':
             # Add bias term
             X = self.add_bias(X)
-            self.coeffs = OLS(X, y)
+
+            # Check if coefficients are to be found analytically
+            if self.fit_type == 'analytic':
+                self.coeffs = OLS(X, y)
+            elif self.fit_type == 'GD':
+                self.coeffs = gradient_descent(X, y, gradient='linear')
         elif self.regr_type == 'ridge':
             X = self.add_bias(X)
-            self.coeffs = ridge(X, y, self.lamb)
+            # Check if coefficients are to be found analytically
+            if self.fit_type == 'analytic':
+                self.coeffs = ridge(X, y, self.lamb)
+            elif self.fit_type == 'GD':
+                self.coeffs = gradient_descent(X, y, gradient='ridge')
+
         
     def predict(self, new_data):
         """
