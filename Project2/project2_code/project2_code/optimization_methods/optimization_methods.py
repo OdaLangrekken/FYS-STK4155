@@ -3,7 +3,7 @@ from sklearn.utils import shuffle
 from project2_code.optimization_methods import gradient_linear, gradient_ridge
 from project2_code.optimization_methods import cost_linear, cost_ridge
 
-def gradient_descent(X, y, alpha=0.1, max_iterations = 1000, loss='squared_error', return_cost=False, lamb=0.1):
+def gradient_descent(X, y, alpha=0.1, max_iterations = 1000, loss='squared_error', return_cost=False, lamb=0.1, momentum=False, momentum_param=0):
     """
     Function that uses gradient descent to find the coefficients that minimze the loss function.
 
@@ -16,6 +16,8 @@ def gradient_descent(X, y, alpha=0.1, max_iterations = 1000, loss='squared_error
     loss (string): loss function to minimize. Default is squared_error
     return_cost (bool): whether to return the cost function as a result of number of iterations
     lamb (float): regularization parameter for Ridge regression
+    momentum (bool): whether to use momentum based
+    momentum_param (float): momentum parameter
 
     Returns
     -----------
@@ -27,6 +29,8 @@ def gradient_descent(X, y, alpha=0.1, max_iterations = 1000, loss='squared_error
 
     # Initialize empty list for cost
     cost = []
+
+    last_update = 0
     
     # Change coefficients in direction of biggest gradient for max_iterations iterations
     for iteration in range(max_iterations):
@@ -40,14 +44,18 @@ def gradient_descent(X, y, alpha=0.1, max_iterations = 1000, loss='squared_error
             if return_cost:
                 cost.append(cost_ridge(X, y, coeffs, lamb))
         # Update coefficients
-        coeffs -= alpha*gradient
+        update = momentum_param*last_update + alpha*gradient
+        coeffs = coeffs - update
+
+        if momentum:
+           last_update = update
 
     if return_cost:
         return coeffs, cost
     return coeffs
 
 
-def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=None, loss='squared_error', return_cost=False):
+def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=None, loss='squared_error', return_cost=False, lamb=0.1, momentum=False, momentum_param=0):
     """
     Function that uses stochastic gradient descent to find the coefficients that minimize the cost function.
 
@@ -61,6 +69,9 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
     random_state (int): random_state to use for shuffle. Set to int for reproducible results
     loss (string): loss function to minimize. Default is squared_error
     return_cost (bool): whether to return the cost function as a result of number of iterations
+    lamb (float): regularization parameter for Ridge regression
+    momentum (bool): whether to use momentum based
+    momentum_param (float): momentum parameter
 
     Returns
     -----------
@@ -72,6 +83,11 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
     # Initialize random coefficients
     coeff_num = X.shape[1] 
     coeffs = np.random.randn(coeff_num)
+
+    # Initialize empty list for cost
+    cost = []
+
+    last_update = 0
     
     for epoch in range(epochs):
         # Shuffle data
@@ -80,8 +96,22 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
         for i in range(num_batches):
             Xi = X[i:i+batch_size]
             yi = y[i:i+batch_size]
-            gradient = gradient_linear(Xi, yi, coeffs)
+            # Find gradient
+            if loss == 'squared_error':
+                gradient = gradient_linear(X, y, coeffs)
+                if return_cost:
+                    cost.append(cost_linear(X, y, coeffs))
+            elif loss == 'squared_error_ridge':
+                gradient = gradient_ridge(X, y, coeffs, lamb)
+                if return_cost:
+                    cost.append(cost_ridge(X, y, coeffs, lamb))
             # Update coefficients
-            coeffs -= alpha*gradient
+            update = momentum_param*last_update + alpha*gradient
+            coeffs = coeffs - update
+
+            if momentum:
+                last_update = update
             
+    if return_cost:
+        return coeffs, cost
     return coeffs
