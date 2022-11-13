@@ -1,7 +1,3 @@
-import os
-import sys
-
-
 import numpy as np
 from project2_code.regression_methods import OLS, ridge
 from project2_code.optimization_methods import gradient_descent
