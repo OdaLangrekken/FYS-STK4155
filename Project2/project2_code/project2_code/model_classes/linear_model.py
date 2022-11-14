@@ -5,10 +5,13 @@ from project2_code.optimization_methods import gradient_descent
 class LinearModel():
 
     """
+    A class to build a Linear Regression Model.
 
     Attributes
     ----
-       coeffs (array): coefficients of the linear model
+       regr_type (string): what method to use for regression (Ordinary Least Squares is default)
+       fit_type (string): whether to use analytical or numerical method to get the coefficients
+       lamb (float): regularization parameter if using Ridge regression
     
     """
 
@@ -18,6 +21,14 @@ class LinearModel():
         self.lamb = lamb
     
     def fit(self, X, y):
+        """
+        Method that finds the best coefficients beta by fitting the model to the data X and output y
+
+        Parameters
+        ----------
+            X (dataframe / array): input data
+            y (array): target        
+        """
         if self.regr_type == 'OLS':
             # Add bias term
             X = self.add_bias(X)

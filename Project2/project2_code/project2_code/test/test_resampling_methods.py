@@ -1,4 +1,4 @@
-from project2_code.linear_model import LinearModel
+from project2_code.model_classes import LinearModel
 from project2_code.make_and_prepare_data import FrankeFunction, create_design_matrix
 from project2_code.model_selection import *
 import unittest

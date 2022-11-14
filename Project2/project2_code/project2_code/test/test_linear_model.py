@@ -1,4 +1,4 @@
-from project2_code.linear_model import LinearModel
+from project2_code.model_classes import LinearModel
 from project2_code.regression_methods import OLS, ridge
 from project2_code.model_selection import MSE
 import unittest

@@ -96,7 +96,7 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
         for i in range(num_batches):
             Xi = X[i:i+batch_size]
             yi = y[i:i+batch_size]
-            # Find gradient
+            # Find gradient for given cost function
             if loss == 'squared_error':
                 gradient = gradient_linear(X, y, coeffs)
                 if return_cost:

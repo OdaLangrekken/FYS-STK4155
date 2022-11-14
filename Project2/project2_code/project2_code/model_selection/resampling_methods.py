@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 
-from project2_code.linear_model import LinearModel
+from project2_code.model_classes import LinearModel
 from project2_code.model_selection import MSE
 
 def cross_validation(model, X, z, num_folds=5, scale=False):
