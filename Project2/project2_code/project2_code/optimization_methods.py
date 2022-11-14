@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.utils import shuffle
-from project2_code.optimization_methods import gradient_linear, gradient_ridge
-from project2_code.optimization_methods import cost_linear, cost_ridge
+from project2_code import gradient_linear, gradient_ridge
+from project2_code import cost_linear, cost_ridge
 
 def gradient_descent(X, y, alpha=0.1, max_iterations = 1000, loss='squared_error', return_cost=False, lamb=0.1, momentum=False, momentum_param=0):
     """

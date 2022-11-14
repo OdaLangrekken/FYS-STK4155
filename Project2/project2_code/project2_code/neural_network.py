@@ -1,17 +1,17 @@
 import numpy as np
-import time
+from project2_code import gradient_descent, stochastic_gradient_descent
 
 class NeuralNetwork:
     def __init__(self, data, target):
-        self.data = self.add_bias(data)  # Add bias unit to input data
         self.target = target
         self.num_inputs = data.shape[1]
         self.num_features = data.shape[0]
-        self.weights = {}
-        self.activations = {}
-        self.activations[0] = self.data
-        self.errors = {}
+        self.weights = {}  # Dictionary to store weights for each layer
+        self.activations = {} # Dictionary to store input for each layer
+        self.activations[0] = self.data 
+        self.errors = {} 
         self.error_matrix = {}
+        self.activation_function = self.sigmoid
         
     def initialize_weights(self, size_layer, size_prev_layer, n):
         # Use the He initializing for weights. Weights drawn from guassian dist with std sqrt(2/n)
@@ -34,50 +34,38 @@ class NeuralNetwork:
     def add_bias(self, x):
         x = np.concatenate((np.ones((x.shape[1], 1)).T, x), axis=0)
         return x
-            
-    def transform(self, a, w):
-        """
-        Calculates matrix product w^T*x
-        """
-        return np.dot(w, a)
-    
-    def activation(self, z):
-        return self.sigmoid(z)
-        #return np.maximum(z, 0)
 
     def sigmoid(self, z):
         sigmoid = 1 / (1 + np.exp(-z))
         return sigmoid
+
+    def sigmoid_derivative(self, z):
+        return z * (1 - z)
             
-    def forward_prop(self, x):
+    def forward_prop(self):
         """
         Propagates input through all layers and return output of final layer
         """
         current_layer = 0
         num_layers = len(self.weights)
+        # Loop through all layers
         while current_layer < num_layers:
             #Get weights for current layer
             weights = self.weights.get(current_layer)
+            #Get input data for current layer
             inputs = self.activations.get(current_layer)
-            z = self.transform(inputs, weights)
-            a = self.sigmoid(z)
-            current_layer += 1
+            #Calculate weighted sum of input
+            z = weights @ inputs
             #If layer is the not the last layer we add bias
             if current_layer != num_layers:
-                a = self.add_bias(a)
-            self.activations[current_layer] = a
-        return a
-            
-    def calculate_cost(self, y_pred, y):
-        m = len(y)    #number of samples
-        loss = y*np.log(y_pred) + (1 - y)*np.log(1 - y_pred)  # Should add regularization
-        return -np.sum(loss)/m
-    
-    def sigmoid_derivative(self, a):
-        return a * (1 - a)
-    
+                z = self.add_bias(z)
+            #Calculate output using activation function
+            y = self.activation_function(z)
+            #Store output to use as input for next layer
+            current_layer += 1
+            self.activations[current_layer] = y
 
-    def back_prop(self, x, y):
+    def back_prop(self, y):
         current_layer = len(self.weights)
         a = self.activations.get(current_layer)
         error = (a - y)
@@ -107,18 +95,15 @@ class NeuralNetwork:
             current_layer += 1
         
     def train(self, num_epochs = 100, learning_rate = 1, reg_coef = 0):
-        start = time.time()
         for i in range(num_epochs):
-            self.forward_prop(self.data)
-            self.back_prop(self.data, self.target)
+            # Get output by using feed forward
+            self.forward_prop()
+            # Propagate error using back propagation
+            self.back_prop(self.target)
+            # Update the weights
             self.update_weights(learning_rate, reg_coef)
             if i % 100 == 0:
                 print(f'Epochs done: {i}/{num_epochs}')
-        end = time.time()
-        if (end - start)/60 < 1:
-            print(f'Time elapsed: {end - start:.2f} s')
-        else:
-            print(f'Time elapsed: {(end - start)/60:.2f} m')
             
     def predict(self, x):
         self.activations[0] = self.add_bias(x)

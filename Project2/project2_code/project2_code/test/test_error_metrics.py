@@ -1,5 +1,5 @@
-from project2_code.model_classes import LinearModel
-from project2_code.model_selection import MSE, R2
+from project2_code import LinearModel
+from project2_code import MSE, R2
 import unittest
 import numpy as np
 import pandas as pd

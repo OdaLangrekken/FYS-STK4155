@@ -1,2 +1,0 @@
-from .error_plots import plot_mse_per_poldegree, plot_R2_per_poldegree
-from .bias_variance_plots import plot_bias_variance

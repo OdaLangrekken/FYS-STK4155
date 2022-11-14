@@ -1,6 +1,6 @@
-from project2_code.model_classes import LinearModel
-from project2_code.regression_methods import OLS, ridge
-from project2_code.model_selection import MSE
+from project2_code import LinearModel
+from project2_code import OLS, ridge
+from project2_code import MSE
 import unittest
 import numpy as np
 import pandas as pd

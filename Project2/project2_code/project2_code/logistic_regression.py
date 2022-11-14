@@ -1,6 +1,6 @@
 import numpy as np
-from project2_code.regression_methods import OLS, ridge
-from project2_code.optimization_methods import gradient_descent
+from project2_code import OLS, ridge
+from project2_code import gradient_descent
 
 class LogisticRegression:
         

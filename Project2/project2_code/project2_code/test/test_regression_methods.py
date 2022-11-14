@@ -1,6 +1,6 @@
-from project2_code.regression_methods import OLS, ridge
-from project2_code.model_selection import MSE
-from project2_code.make_and_prepare_data import create_design_matrix_1d
+from project2_code import OLS, ridge
+from project2_code import MSE
+from project2_code import create_design_matrix_1d
 import unittest
 import numpy as np
 import pandas as pd
