@@ -3,7 +3,7 @@ from sklearn.utils import shuffle
 from project2_code import gradient_linear, gradient_ridge, gradient_logistic
 from project2_code import cost_linear, cost_ridge, cross_entropy
 
-def gradient_descent(X, y, alpha=0.1, max_iterations = 1000, loss='squared_error', return_cost=False, lamb=0.1, momentum_param=0):
+def gradient_descent(X, y, alpha=0.1, max_iterations = 100, loss='squared_error', return_cost=False, lamb=0.1, momentum_param=0):
     """
     Function that uses gradient descent to find the coefficients that minimze the loss function.
 
@@ -92,27 +92,27 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
     for epoch in range(epochs):
         # Shuffle data
         X_shuffle, y_shuffle = shuffle(X, y, random_state=random_state)
-        # Do gradient descent for each batch
-        for i in range(num_batches):
-            Xi = X[i:i+batch_size]
-            yi = y[i:i+batch_size]
-            # Find gradient for given cost function
-            if loss == 'squared_error':
-                gradient = gradient_linear(X, y, coeffs)
-                if return_cost:
-                    cost.append(cost_linear(X, y, coeffs))
-            elif loss == 'squared_error_ridge':
-                gradient = gradient_ridge(X, y, coeffs, lamb)
-                if return_cost:
-                    cost.append(cost_ridge(X, y, coeffs, lamb))
-            elif loss == 'logistic':
-                gradient = gradient_logistic(X, y, coeffs)
-                if return_cost:
-                    cost.append(cross_entropy(X, y, coeffs))
-            # Update coefficients
-            update = momentum_param*last_update + alpha*gradient
-            coeffs = coeffs - update
-            last_update = update
+        # Choose random batch
+        batch_chosen = np.random.randint(0, num_batches)
+        Xi = X[batch_chosen:batch_chosen+batch_size]
+        yi = y[batch_chosen:batch_chosen+batch_size]
+        # Find gradient for given cost function
+        if loss == 'squared_error':
+            gradient = gradient_linear(X, y, coeffs)
+            if return_cost:
+                cost.append(cost_linear(X, y, coeffs))
+        elif loss == 'squared_error_ridge':
+            gradient = gradient_ridge(X, y, coeffs, lamb)
+            if return_cost:
+                cost.append(cost_ridge(X, y, coeffs, lamb))
+        elif loss == 'logistic':
+            gradient = gradient_logistic(X, y, coeffs)
+            if return_cost:
+                cost.append(cross_entropy(X, y, coeffs))
+        # Update coefficients
+        update = momentum_param*last_update + alpha*gradient
+        coeffs = coeffs - update
+        last_update = update
             
     if return_cost:
         return coeffs, cost

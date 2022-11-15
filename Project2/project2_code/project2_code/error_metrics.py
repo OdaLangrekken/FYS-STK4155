@@ -29,3 +29,20 @@ def MSE(y_data,y_model):
 
     n = np.size(y_model)
     return np.sum((y_data-y_model)**2)/n
+
+def accuracy(y_data, y_model):
+    """
+    Calculates the accuracy of a classification model.
+
+    Parameters:
+        y_data (array): The real output values.
+        y_model (array): The output values predicted by the model. 
+  
+    Returns:
+        accuracy (float): the percentage of correct predictions
+    """
+    acc = 0
+    for i in range(len(y_data)):
+        if y_data[i] == y_model[i]:
+            acc += 1
+    return acc/len(y_data)
