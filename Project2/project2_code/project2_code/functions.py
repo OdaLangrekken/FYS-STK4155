@@ -41,4 +41,10 @@ def simple_polynomial(x, polynomial_degree, set_seed = True):
     y = coeffs @ x_polynomial
     return y
 
+def sigmoid(z):
+    """
+    The sigmoid function
+    """
+    return 1 / (1 + np.exp(-z))
+
 
