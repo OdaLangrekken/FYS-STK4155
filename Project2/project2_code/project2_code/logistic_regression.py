@@ -12,14 +12,16 @@ class LogisticRegression:
        regr_type (string): what method to use for regularization (default None)
        solver (string): optimazitation method to use for fitting (default gradient descent)
        learning_rate (float): learing rate to use for optimization method
+       max_iterations (int): number of iterations for gradient descent
        lamb (float): regularization parameter if using regularization
     
     """
         
-    def __init__(self, regr_type = None, solver = 'GD', learning_rate=0.1, lamb = 0):
+    def __init__(self, regr_type = None, solver = 'GD', learning_rate=0.1, max_iterations = 1000, lamb = 0):
         self.regr_type = regr_type
         self.solver = solver
         self.lamb = lamb
+        self.max_iterations = max_iterations
                             
     def fit(self, X, y):
         """
@@ -33,9 +35,9 @@ class LogisticRegression:
         # Add bias
         X = self.add_bias(X)
         if self.solver == 'GD':
-            self.coeffs = gradient_descent(X, y, loss='logistic')
+            self.coeffs = gradient_descent(X, y, loss='logistic', max_iterations=self.max_iterations)
         elif self.solver == 'SGD':
-            self.coeffs = stochastic_gradient_descent(X, y, loss='logistic')
+            self.coeffs = stochastic_gradient_descent(X, y, loss='logistic', max_iterations=self.max_iterations)
 
     def predict_proba(self, new_data):
         """

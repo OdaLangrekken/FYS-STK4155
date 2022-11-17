@@ -1,6 +1,8 @@
 import numpy as np
+from sklearn.utils import shuffle
 from project2_code import gradient_descent, stochastic_gradient_descent, cost_linear, cross_entropy
 from project2_code import sigmoid, sigmoid_derivative, relu, relu_derivative, relu_leaky, relu_leaky_derivative
+from project2_code import MSE, R2, accuracy
 
 class NeuralNetwork:
 
@@ -144,7 +146,7 @@ class NeuralNetwork:
         if self.learning_type == 'regr':
             activation_deriv = np.ones((len(z), 1))
         elif self.learning_type == 'class':
-            activation_deriv = sigmoid_prime(z)
+            activation_deriv = sigmoid_derivative(z)
         output_error = C_deriv * activation_deriv
         # Store error for last layer
         self.errors[current_layer] = output_error
@@ -173,7 +175,7 @@ class NeuralNetwork:
             self.biases[current_layer] = self.biases[current_layer] - learning_rate*np.sum(error, axis=0)
             current_layer += 1
         
-    def train(self, data, target, num_epochs = 100, minibatches = 1, learning_rate = 0.01, reg_coef = 0): 
+    def train(self, data, target, num_epochs = 100, minibatches = 1, learning_rate = 0.01, reg_coef = 0, return_loss=False, loss='MSE', data_val=None, target_val=None): 
         """
         This function trains the network. For every epoch the input is propagated through the network to get the
         final output, and the error is propagated backwards. The weights are updated. This is repeated for num_epochs iterations.
@@ -185,10 +187,19 @@ class NeuralNetwork:
         num_epochs (int): number of epochs to train the network with forward and backward propagation
         minibatches (int): number of batches
         learning_rate (float): learning rate for gradient descent
+        return_loss (bool): whether to return the train and validation loss for all epochs
+        loss (string): which loss function to use if returning loss
+        data_val (dataframe / array): input validation data
+        target_val (array): validation target
         """
         # Find size of each minibatch
         n = len(data)  # number of rows
         batch_size = int(n/minibatches)
+        
+        # Create empty list for loss of return_loss
+        if return_loss:
+            self.loss_train = []
+            self.loss_val = []
         
         for i in range(num_epochs):
             # Shuffle data
@@ -206,6 +217,27 @@ class NeuralNetwork:
             # Update the weights
             self.update_weights(learning_rate, reg_coef)
             
+            if return_loss:
+                target_pred_val = self.predict(data_val)
+                if loss == 'MSE':
+                    val_loss = MSE(target_pred_val, target_val)
+                elif loss == 'R2':
+                    val_loss = R2(target_pred_val, target_val)
+                elif loss == 'accuracy':
+                    val_loss = accuracy(target_pred_val, target_val)
+                    
+                target_pred_train = self.predict(data)
+                if loss == 'MSE':
+                    train_loss = MSE(target_pred_train, target)
+                elif loss == 'R2':
+                    train_loss = R2(target_pred_train, target)
+                elif loss == 'accuracy':
+                    train_loss = accuracy(target_pred_train, target)
+                
+                self.loss_val.append(val_loss)
+                self.loss_train.append(train_loss)
+                
+                
     def predict(self, x):
         """
         Predicts the output of new data.
@@ -217,7 +249,7 @@ class NeuralNetwork:
         self.forward_prop()
         preds = self.activations[len(self.activations) - 1].ravel()
         if self.learning_type == 'class':
-            return np.argmax(preds, axis = 0)
+            return np.where(preds >= 0.5, 1, 0)
         return preds
     
     def predict_proba(self, x):
