@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.utils import shuffle
 from project2_code import gradient_descent, stochastic_gradient_descent, cost_linear, cross_entropy
 from project2_code import sigmoid, sigmoid_derivative, relu, relu_derivative, relu_leaky, relu_leaky_derivative
-from project2_code import MSE, R2, accuracy
+from project2_code import MSE, R2, accuracy, cross_entropy
 
 class NeuralNetwork:
 
@@ -171,7 +171,7 @@ class NeuralNetwork:
         while current_layer < len(self.weights):
             activations = self.activations[current_layer]
             error = self.errors[current_layer + 1]
-            self.weights[current_layer] = self.weights[current_layer] - learning_rate*np.dot(activations.T, error)
+            self.weights[current_layer] = (1-learning_rate*reg_coef/len(activations))*self.weights[current_layer] - learning_rate*np.dot(activations.T, error)
             self.biases[current_layer] = self.biases[current_layer] - learning_rate*np.sum(error, axis=0)
             current_layer += 1
         
@@ -187,6 +187,7 @@ class NeuralNetwork:
         num_epochs (int): number of epochs to train the network with forward and backward propagation
         minibatches (int): number of batches
         learning_rate (float): learning rate for gradient descent
+        reg_coef (float): L2 regularization parameter
         return_loss (bool): whether to return the train and validation loss for all epochs
         loss (string): which loss function to use if returning loss
         data_val (dataframe / array): input validation data
@@ -225,6 +226,8 @@ class NeuralNetwork:
                     val_loss = R2(target_pred_val, target_val)
                 elif loss == 'accuracy':
                     val_loss = accuracy(target_pred_val, target_val)
+                elif loss == 'logistic':
+                    val_loss = cross_entropy(target_pred_val, target_val)
                     
                 target_pred_train = self.predict(data)
                 if loss == 'MSE':

@@ -46,3 +46,10 @@ def accuracy(y_data, y_model):
         if y_data[i] == y_model[i]:
             acc += 1
     return acc/len(y_data)
+
+def cross_entropy(y_data, y_model):
+    """
+    Cost function for logisitc regression. The cost function is the cross-entropy (negative log-likelihood)
+    """
+    cost = np.sum(y_data @ y_model - np.log(1 + np.exp(y_model)))
+    return cost

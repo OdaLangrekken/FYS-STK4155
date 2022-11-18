@@ -17,11 +17,11 @@ class LogisticRegression:
     
     """
         
-    def __init__(self, regr_type = None, solver = 'GD', learning_rate=0.1, max_iterations = 1000, lamb = 0):
+    def __init__(self, regr_type = None, solver = 'GD', learning_rate=0.1, epochs = 1000, lamb = 0):
         self.regr_type = regr_type
         self.solver = solver
         self.lamb = lamb
-        self.max_iterations = max_iterations
+        self.epochs = epochs
                             
     def fit(self, X, y):
         """
@@ -35,9 +35,9 @@ class LogisticRegression:
         # Add bias
         X = self.add_bias(X)
         if self.solver == 'GD':
-            self.coeffs = gradient_descent(X, y, loss='logistic', max_iterations=self.max_iterations)
+            self.coeffs = gradient_descent(X, y, loss='logistic', epochs=self.epochs, lamb=self.lamb)
         elif self.solver == 'SGD':
-            self.coeffs = stochastic_gradient_descent(X, y, loss='logistic', max_iterations=self.max_iterations)
+            self.coeffs = stochastic_gradient_descent(X, y, loss='logistic', epochs=self.epochs, lamb=self.lamb)
 
     def predict_proba(self, new_data):
         """

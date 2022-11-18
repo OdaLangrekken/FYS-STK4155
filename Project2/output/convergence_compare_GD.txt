@@ -1,5 +1,5 @@
-Comparing convergence GD with momentum. Learning rate: 0.5. Convergence when error less than: 1e-05  
-Momentum parameter: 0. Convergence after 1231 iterations 
-Momentum parameter: 0.1. Convergence after 1138 iterations 
-Momentum parameter: 0.3. Convergence after 847 iterations 
-Momentum parameter: 0.7. Convergence after 367 iterations 
+Comparing convergence GD with momentum. Learning rate: 0.3. Convergence when error less than: 0.01  
+Momentum parameter: 0. Convergence after 313 iterations 
+Momentum parameter: 0.1. Convergence after 281 iterations 
+Momentum parameter: 0.3. Convergence after 216 iterations 
+Momentum parameter: 0.7. Convergence after 77 iterations 
