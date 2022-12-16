@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.utils import shuffle
-from project2_code import gradient_descent, stochastic_gradient_descent, cost_linear, cross_entropy
-from project2_code import sigmoid, sigmoid_derivative, relu, relu_derivative, relu_leaky, relu_leaky_derivative
-from project2_code import MSE, R2, accuracy, cross_entropy
+from project3_code import gradient_descent, stochastic_gradient_descent, cost_linear, cross_entropy
+from project3_code import sigmoid, sigmoid_derivative, relu, relu_derivative, relu_leaky, relu_leaky_derivative
+from project3_code import MSE, R2, accuracy, cross_entropy
 
 class NeuralNetwork:
 
@@ -138,9 +138,9 @@ class NeuralNetwork:
         # Start with last layer
         current_layer = len(self.weights)
         # Get output for last layer
-        a = self.activations.get(current_layer).ravel()
+        a = self.activations.get(current_layer)
         # Derivative of cost function for MSE
-        C_deriv = (a - y).reshape(-1, 1)
+        C_deriv = (a - y)
         # Get derivative of activation function used in last layer
         z = self.compute_z(current_layer-1)
         if self.learning_type == 'regr':
@@ -201,10 +201,11 @@ class NeuralNetwork:
         if return_loss:
             self.loss_train = []
             self.loss_val = []
+            
+        # Shuffle data
+        data_shuffle, target_shuffle = shuffle(data, target)
         
         for i in range(num_epochs):
-            # Shuffle data
-            data_shuffle, target_shuffle = shuffle(data, target)
             # Choose random batch
             batch_chosen = np.random.randint(0, minibatches)
             data_minibatch = data_shuffle[batch_chosen:batch_chosen+batch_size]
@@ -250,9 +251,12 @@ class NeuralNetwork:
         self.activations[0] = x
         # Propagate input
         self.forward_prop()
-        preds = self.activations[len(self.activations) - 1].ravel()
+        preds = self.activations[len(self.activations) - 1]
         if self.learning_type == 'class':
-            return np.where(preds >= 0.5, 1, 0)
+            predicted_class = []
+            for pred in preds:
+                predicted_class.append(np.argmax(pred))
+            return predicted_class
         return preds
     
     def predict_proba(self, x):

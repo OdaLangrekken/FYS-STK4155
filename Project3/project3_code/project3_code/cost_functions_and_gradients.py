@@ -1,5 +1,5 @@
 import numpy as np
-from project2_code import sigmoid
+from project3_code import sigmoid
 
 def cost_linear(X, y, coeffs, lamb=0):
     """
@@ -14,8 +14,8 @@ def cross_entropy(X, y, coeffs, lamb=0):
     Cost function for logisitc regression. The cost function is the cross-entropy (negative log-likelihood)
     """
     n = len(y)
-    z = X @ coeffs
-    cost = np.sum(y @ z - np.log(1 + np.exp(z))) + lamb * np.sum(coeffs)**2
+    z = sigmoid(X @ coeffs)
+    cost = -(1/n)*np.sum(y @ np.log(z) + (1-y) @ np.log(1 - z + 1e-5)) + (1/n)*lamb * np.sum(coeffs)**2
     return cost
     
 def gradient_linear(X, y, beta, lamb=0):

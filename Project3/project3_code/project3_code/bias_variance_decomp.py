@@ -1,5 +1,5 @@
 import numpy as np
-from project2_code import make_bootstrap_sample, MSE
+from project3_code import make_bootstrap_sample, MSE
 
 def bias_variance_decomp(model, X_train, z_train, X_test, z_test, boostrap_iterations=5):
 

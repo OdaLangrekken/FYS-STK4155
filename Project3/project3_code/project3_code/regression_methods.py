@@ -1,5 +1,5 @@
 import numpy as np 
-from project2_code import FrankeFunction
+from project3_code import FrankeFunction
 
 def OLS(X, y):
     """

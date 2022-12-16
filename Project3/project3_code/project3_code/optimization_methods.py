@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.utils import shuffle
-from project2_code import gradient_linear, gradient_logistic
-from project2_code import cost_linear, cross_entropy
+from project3_code import gradient_linear, gradient_logistic
+from project3_code import cost_linear, cross_entropy, accuracy, sigmoid
 
 def gradient_descent(X, y, alpha=0.1, max_iterations = 100, loss='squared_error', lamb=0, momentum_param=0, return_cost=False, X_val=None, y_val=None):
     """
@@ -92,14 +92,17 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
     cost_val = []
 
     last_update = 0
+
+    # Shuffle data
+    X_shuffle, y_shuffle = shuffle(X, y, random_state=random_state)
     
     for epoch in range(epochs):
-        # Shuffle data
-        X_shuffle, y_shuffle = shuffle(X, y, random_state=random_state)
+        
         # Choose random batch
+        np.random.seed(random_state)
         batch_chosen = np.random.randint(0, num_batches)
-        Xi = X[batch_chosen:batch_chosen+batch_size]
-        yi = y[batch_chosen:batch_chosen+batch_size]
+        Xi = X_shuffle[batch_chosen:batch_chosen+batch_size]
+        yi = y_shuffle[batch_chosen:batch_chosen+batch_size]
         # Find gradient for given cost function
         if loss == 'squared_error':
             gradient = gradient_linear(Xi, yi, coeffs, lamb)
@@ -109,6 +112,7 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
         elif loss == 'logistic':
             gradient = gradient_logistic(Xi, yi, coeffs, lamb)
             if return_cost:
+                y_model = sigmoid
                 cost_train.append(cross_entropy(X, y, coeffs, lamb))
                 cost_val.append(cross_entropy(X_val, y_val, coeffs, lamb))
         # Update coefficients
@@ -116,6 +120,4 @@ def stochastic_gradient_descent(X, y, alpha, num_batches, epochs, random_state=N
         coeffs = coeffs - update
         last_update = update
             
-    if return_cost:
-        return coeffs, cost_train, cost_val
-    return coeffs
+    return coeffs, cost_train, cost_val

@@ -1,6 +1,6 @@
 import numpy as np
-from project2_code import OLS, ridge
-from project2_code import gradient_descent
+from project3_code import OLS, ridge
+from project3_code import gradient_descent
 
 class LinearModel():
 
